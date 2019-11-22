@@ -1,6 +1,5 @@
 export interface TaskType {
-  id: number;
+  id: string;
   name: string;
   isDone: boolean;
 }
-

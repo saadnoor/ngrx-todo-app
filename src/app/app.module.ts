@@ -15,6 +15,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { TodoComponent } from './todo/todo.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { taskReducer } from './reducers/task.reducer';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +41,7 @@ import { environment } from '../environments/environment';
         strictActionImmutability: true
       }
     }),
+    StoreModule.forFeature('task', taskReducer),
     BrowserAnimationsModule,
     MatCardModule,
     MatMenuModule,
