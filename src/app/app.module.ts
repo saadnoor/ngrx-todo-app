@@ -8,24 +8,30 @@ import { reducers, metaReducers } from './reducers';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule, MatIconModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatInputModule, MatMenuModule } from '@angular/material';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
+import { TodoComponent } from './todo/todo.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    TodoComponent
   ],
   imports: [
     BrowserModule,
     MatToolbarModule,
+    MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
     MatFormFieldModule,
+    MatCheckboxModule,
     MatIconModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
@@ -35,7 +41,9 @@ import { RegistrationComponent } from './registration/registration.component';
       }
     }),
     BrowserAnimationsModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule,
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

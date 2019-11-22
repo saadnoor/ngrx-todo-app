@@ -1,5 +1,9 @@
 <mat-toolbar>
-  <span>Angular Todo Application</span>
+  <span class="title">Angular Todo Application</span>
+  <button mat-menu-item (click)="signOut()" class="button">
+    <mat-icon>exit_to_app</mat-icon>
+    Logout
+  </button>
 </mat-toolbar>
 <router-outlet>
 </router-outlet>
