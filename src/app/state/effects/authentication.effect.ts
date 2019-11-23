@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-// import { Action } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
@@ -12,11 +11,11 @@ import {
   SignUp,
   SignUpFailure,
   SignUpSuccess
-} from '../../actions/authentication.action';
-import { AuthenticationService } from '../services/authentication.service';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
+} from '../actions/authentication.action';
+
 import { exhaustMap } from 'rxjs/internal/operators/exhaustMap';
 import { Toaster } from 'ngx-toast-notifications';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Injectable()
 export class AuthEffects {
@@ -65,7 +64,7 @@ export class AuthEffects {
   @Effect()
   SignUp: Observable<any> = this.actions.pipe(
     ofType(AuthenticationActionType.SIGNUP),
-    map((action: LogIn) => action.payload),
+    map((action: SignUp) => action.payload),
     exhaustMap(payload => {
         console.log('payLoad is', payload);
 
@@ -92,52 +91,9 @@ export class AuthEffects {
   SignUpFailure: Observable<any> = this.actions.pipe(
     ofType(AuthenticationActionType.SIGNUP_FAILURE),
     tap(msg => {
-      console.log(msg);
+        console.log(msg);
         this.toaster.open('Please try again');
-    }
+      }
     )
   );
-
-  // @Effect()
-  // SignUp: Observable<any> = this.actions
-  //   .ofType(AuthActionTypes.SIGNUP)
-  //   .map((action: SignUp) => action.payload)
-  //   .switchMap(payload => {
-  //     return this.authService.signUp(payload.email, payload.password)
-  //       .map((user) => {
-  //         return new SignUpSuccess({token: user.token, email: payload.email});
-  //       })
-  //       .catch((error) => {
-  //         return Observable.of(new SignUpFailure({ error: error }));
-  //       });
-  //   });
-  //
-  // @Effect({ dispatch: false })
-  // SignUpSuccess: Observable<any> = this.actions.pipe(
-  //   ofType(AuthActionTypes.SIGNUP_SUCCESS),
-  //   tap((user) => {
-  //     localStorage.setItem('token', user.payload.token);
-  //     this.router.navigateByUrl('/');
-  //   })
-  // );
-  //
-  // @Effect({ dispatch: false })
-  // SignUpFailure: Observable<any> = this.actions.pipe(
-  //   ofType(AuthActionTypes.SIGNUP_FAILURE)
-  // );
-  //
-  // @Effect({ dispatch: false })
-  // public LogOut: Observable<any> = this.actions.pipe(
-  //   ofType(AuthActionTypes.LOGOUT),
-  //   tap((user) => {
-  //     localStorage.removeItem('token');
-  //   })
-  // );
-  //
-  // @Effect({ dispatch: false })
-  // GetStatus: Observable<any> = this.actions
-  //   .ofType(AuthActionTypes.GET_STATUS)
-  //   .switchMap(payload => {
-  //     return this.authService.getStatus();
-  //   });
 }

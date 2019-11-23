@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-import { TaskType } from '../app/interfaces/task.interface';
-
+import { TaskType } from '../../interfaces/task.interface';
 
 export const CREATE = '[Task] Create';
 export const UPDATE = '[Task] Update';

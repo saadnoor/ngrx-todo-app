@@ -5,7 +5,6 @@ import { ToastNotificationsModule } from 'ngx-toast-notifications';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,12 +15,15 @@ import { RegistrationComponent } from './registration/registration.component';
 import { TodoComponent } from './todo/todo.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { taskReducer } from './reducers/task.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
-import { authenticationReducer } from './reducers/authentication.reducer';
-import { AuthEffects } from './effects/authentication.effect';
 import { AuthenticationService } from './services/authentication.service';
+import { TodoService } from './services/todo.service';
+import { AuthEffects } from './state/effects/authentication.effect';
+import { taskReducer } from './state/reducers/task.reducer';
+import { authenticationReducer } from './state/reducers/authentication.reducer';
+import { metaReducers, reducers } from './state/reducers';
+import { TodoEffects } from './state/effects/todo.effect';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,10 +56,11 @@ import { AuthenticationService } from './services/authentication.service';
     MatCardModule,
     MatMenuModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([AppEffects, AuthEffects])
+    EffectsModule.forRoot([AppEffects, AuthEffects, TodoEffects])
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    TodoService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,8 @@
-import * as actions from '../../actions/task.action';
+import * as actions from '../actions/task.action';
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
-import { TaskType } from '../interfaces/task.interface';
+import { TaskType } from '../../interfaces/task.interface';
+
 
 
 // Entity adapter

@@ -1,12 +1,9 @@
-import { UserType } from '../interfaces/user.interface';
-import { All, AuthenticationActionType } from '../../actions/authentication.action';
+import { UserType } from '../../interfaces/user.interface';
+import { All, AuthenticationActionType } from '../actions/authentication.action';
 
 export interface AuthState {
-  // is a user authenticated?
   isAuthenticated: boolean;
-  // if authenticated, there should be a user object
   user: UserType | null;
-  // error message
   errorMessage: string | null;
 }
 

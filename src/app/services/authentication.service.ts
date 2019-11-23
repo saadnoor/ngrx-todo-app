@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {  Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { UserType } from '../interfaces/user.interface';
 
 @Injectable()
