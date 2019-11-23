@@ -1,27 +1,14 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, of, throwError } from 'rxjs';
+import {  Observable, of, throwError } from 'rxjs';
 import { UserType } from '../interfaces/user.interface';
-import { errorObject } from 'rxjs/internal-compatibility';
 
 @Injectable()
 export class AuthenticationService {
   constructor() {
   }
 
-  getToken(): string {
-    return localStorage.getItem('token');
-  }
-
   logIn(email: string, password: string): Observable<UserType> {
-    const fakeUsers: UserType[] = [{
-      email: 'saadnoors9@gmail.com',
-      password: '123456',
-      name: 'saadnoor'
-    }
-    ];
-    const users: UserType[] = fakeUsers;
-    // const users: any[] = localStorage.getItem('users');
-    // console.log('THE USERS ARE', users);
+    const users: UserType[] = JSON.parse(localStorage.getItem('users')) || [];
 
     let returnUser: UserType;
     users.forEach(user => {
@@ -33,17 +20,20 @@ export class AuthenticationService {
     if (returnUser) {
       return of(returnUser);
     } else {
-      return throwError('FUCK THIS SHIT');
+      return throwError('Login Failed');
     }
   }
 
-  // signUp(email: string, password: string): Observable<UserType> {
-  //   const url = `${this.BASE_URL}/register`;
-  //   return this.http.post<User>(url, { email, password });
-  // }
-  //
-  // getStatus(): Observable<User> {
-  //   const url = `${this.BASE_URL}/status`;
-  //   return this.http.get<User>(url);
-  // }
+  signUp(user: UserType): Observable<UserType> {
+    try {
+      const users: UserType[] = JSON.parse(localStorage.getItem('users')) || [];
+      console.log(users);
+      users.push(user);
+      localStorage.setItem('users', JSON.stringify(users));
+
+      return of(user);
+    } catch (e) {
+      return throwError(e);
+    }
+  }
 }

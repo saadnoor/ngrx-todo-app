@@ -27,7 +27,6 @@ export class AuthEffects {
     private router: Router,
     private toaster: Toaster
   ) {
-    console.log('called effect');
   }
 
   @Effect()
@@ -44,30 +43,6 @@ export class AuthEffects {
         );
       }
     ));
-  // map((action: LogIn) => action.payload),
-  //  switchMap(payload => {
-  //    console.log('okay mapped');
-  //    const x = this.authenticationService.logIn(payload.email, payload.password);
-  //    x.subscribe(user => {
-  //      console.log('lol', user);
-  //    });
-  //    return x;
-  //   .pipe(
-  //   tap(err => {
-  //     console.log(err);
-  //   }),
-  //   map((user) => {
-  //     console.log('user in login check ef', user);
-  //     return of(new LogInSuccess({ user }));
-  //   }),
-  //   catchError((error) => {
-  //     console.log('user in login err', error);
-  //
-  //     return of(new LogInFailure({ error }));
-  //   })
-  // );
-  // }));
-
 
   @Effect({ dispatch: false })
   LogInSuccess: Observable<any> = this.actions.pipe(
@@ -84,6 +59,42 @@ export class AuthEffects {
   LogInFailure: Observable<any> = this.actions.pipe(
     ofType(AuthenticationActionType.LOGIN_FAILURE),
     tap(msg => this.toaster.open('Wrong username or password')
+    )
+  );
+
+  @Effect()
+  SignUp: Observable<any> = this.actions.pipe(
+    ofType(AuthenticationActionType.SIGNUP),
+    map((action: LogIn) => action.payload),
+    exhaustMap(payload => {
+        console.log('payLoad is', payload);
+
+        return this.authenticationService.signUp(payload).pipe(
+          tap(bal => console.log('baal', bal)),
+          map(user => new SignUpSuccess({ user })),
+          catchError(error => of(new SignUpFailure({ error })))
+        );
+      }
+    ));
+
+  @Effect({ dispatch: false })
+  SignUpSuccess: Observable<any> = this.actions.pipe(
+    ofType(AuthenticationActionType.SIGNUP_SUCCESS),
+    tap((user) => {
+      this.toaster.open('Successfully Registered!');
+
+      //  localStorage.setItem('token', user.payload.token);
+      this.router.navigateByUrl('/login');
+    })
+  );
+
+  @Effect({ dispatch: false })
+  SignUpFailure: Observable<any> = this.actions.pipe(
+    ofType(AuthenticationActionType.SIGNUP_FAILURE),
+    tap(msg => {
+      console.log(msg);
+        this.toaster.open('Please try again');
+    }
     )
   );
 
