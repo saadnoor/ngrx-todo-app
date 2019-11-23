@@ -1,0 +1,22 @@
+<mat-card class="card">
+  <mat-card-title align="center">My Todo List</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="addTask()">
+        <mat-form-field>
+          <input matInput placeholder="Task" type="text" formControlName="taskName">
+        </mat-form-field>
+        <button  mat-raised-button color="primary" type="submit" mat-button style="margin-left: 20px">Add
+        </button>
+    </form>
+    <div *ngFor="let task of tasks| async">
+      <mat-checkbox (click)="taskClicked(task)"
+                    [checked]="task.isDone"
+                    color="primary"
+                    (change)="toggle($event, task)">
+        <span *ngIf="task.isDone" style="text-decoration: line-through;"> {{ task.name  }}</span>
+        <span *ngIf="!task.isDone"> {{ task.name  }}</span>
+      </mat-checkbox>
+      <mat-icon (click)="iconClicked(task)">close</mat-icon>
+    </div>
+  </mat-card-content>
+</mat-card>
