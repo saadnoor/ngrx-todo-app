@@ -6,7 +6,7 @@ import { TodoComponent } from './todo/todo.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/todo', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'todo', component: TodoComponent }

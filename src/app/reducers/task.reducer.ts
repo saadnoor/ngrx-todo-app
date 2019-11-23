@@ -9,27 +9,17 @@ export const taskAdapter = createEntityAdapter<TaskType>();
 
 export interface State extends EntityState<TaskType> {
 }
-
-
 // Default data / initial state
 
 const defaultTask = {
-  // ids: ['1'],
-  // entities: {
-  //   1: {
-  //     id: 1,
-  //     name: 'default',
-  //     isDone: false
-  //   }
-  // }
 };
 
-export const initialState: State = taskAdapter.getInitialState(defaultTask);
+export const initialTaskState: State = taskAdapter.getInitialState(defaultTask);
 
 // Reducer
 
 export function taskReducer(
-  state: State = initialState,
+  state: State = initialTaskState,
   action: actions.TaskActions) {
 
   switch (action.type) {
