@@ -1,0 +1,95 @@
+#################################
+# GitLab Continuous Integration #
+#################################
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  # Install headless chrome dependencies
+  # See https://techoverflow.net/2018/06/05/how-to-fix-puppetteer-error-while-loading-shared-libraries-libx11-xcb-so-1-cannot-open-shared-object-file-no-such-file-or-directory/
+  - apt-get update
+  - apt-get install -y libasound2 libnss3 libxss1 libgtk-3-0
+  # Install node, npm, and project dependencies
+  - export PATH=$PATH:$(pwd)/node_modules/.bin
+  - npm config --global set cache $(pwd)/.npm
+  - npm --quiet install
+  - (cd functions; npm --quiet install)
+
+#------------------
+# Common Templates
+#------------------
+
+.job_common: &job_common
+  image: node:10
+  cache:
+    key: "node-10-npm"
+    paths:
+      - .npm/
+
+.job_env_ALL: &job_env_ALL
+  only:
+    - /^[0-9]+-.*$/
+    - master
+    - release
+    - /^v[0-9\.]+$/
+
+.job_env_dev: &job_env_dev
+  only:
+    - master
+
+.job_env_prod: &job_env_prod
+  only:
+    - release
+    - /^v[0-9\.]+$/
+
+#--------
+# Build
+#--------
+
+job_build:
+  stage: build
+  <<: *job_common
+  <<: *job_env_ALL
+  script:
+    - ng lint
+    - ng build
+    - CHROME_ARGS="--no-sandbox" ng test --watch=false --browsers=CustomChromeHeadless
+    - CHROME_ARGS="--no-sandbox --headless" ng e2e
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
+
+#--------
+# Deploy
+#--------
+
+job_deploy_dev:
+  stage: deploy
+  <<: *job_common
+  <<: *job_env_dev
+  dependencies:
+    - job_build
+  script:
+    - ng build --configuration development
+    # No deployment for now
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - dist/
+
+job_deploy_prod:
+  stage: deploy
+  <<: *job_common
+  <<: *job_env_prod
+  dependencies:
+    - job_build
+  script:
+    - ng build --configuration production
+    # No deployment for now
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - dist/

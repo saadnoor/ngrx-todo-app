@@ -33,8 +33,6 @@ export class AuthEffects {
     ofType(AuthenticationActionType.LOGIN),
     map((action: LogIn) => action.payload),
     exhaustMap(payload => {
-        console.log('payLoad is', payload);
-
         return this.authenticationService.logIn(payload.email, payload.password).pipe(
           tap(bal => console.log('baal', bal)),
           map(user => new LogInSuccess({ user })),
@@ -49,7 +47,6 @@ export class AuthEffects {
     tap((user) => {
       this.toaster.open('Successfully Logged in!');
 
-      //  localStorage.setItem('token', user.payload.token);
       this.router.navigateByUrl('/todo');
     })
   );
@@ -57,7 +54,9 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   LogInFailure: Observable<any> = this.actions.pipe(
     ofType(AuthenticationActionType.LOGIN_FAILURE),
-    tap(msg => this.toaster.open('Wrong username or password')
+
+    // FIXME: Remove hardcoded string
+    tap(response => this.toaster.open('Wrong username or password')
     )
   );
 
@@ -66,8 +65,6 @@ export class AuthEffects {
     ofType(AuthenticationActionType.SIGNUP),
     map((action: SignUp) => action.payload),
     exhaustMap(payload => {
-        console.log('payLoad is', payload);
-
         return this.authenticationService.signUp(payload).pipe(
           tap(bal => console.log('baal', bal)),
           map(user => new SignUpSuccess({ user })),
@@ -81,8 +78,6 @@ export class AuthEffects {
     ofType(AuthenticationActionType.SIGNUP_SUCCESS),
     tap((user) => {
       this.toaster.open('Successfully Registered!');
-
-      //  localStorage.setItem('token', user.payload.token);
       this.router.navigateByUrl('/login');
     })
   );
@@ -90,9 +85,8 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   SignUpFailure: Observable<any> = this.actions.pipe(
     ofType(AuthenticationActionType.SIGNUP_FAILURE),
-    tap(msg => {
-        console.log(msg);
-        this.toaster.open('Please try again');
+    tap(response => {
+        this.toaster.open(response.payload.error.toString());
       }
     )
   );

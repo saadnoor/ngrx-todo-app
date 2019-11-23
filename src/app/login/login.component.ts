@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
       password: this.form.value.password
     };
 
-    console.log('CALLED LOGIN yes', payload);
     this.store.dispatch(new LogIn(payload));
   }
 }

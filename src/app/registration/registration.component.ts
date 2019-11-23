@@ -33,11 +33,13 @@ export class RegistrationComponent implements OnInit {
   }
 
   registration() {
-    const payload = {
+    const user = {
       email: this.form.value.email,
-      password: this.form.value.password
+      password: this.form.value.password,
+      name: this.form.value.name
     };
-    this.store.dispatch(new SignUp(payload));
+
+    this.store.dispatch(new SignUp(user));
   }
 }
 

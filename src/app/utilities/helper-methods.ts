@@ -1,7 +1,6 @@
 import { FormGroup } from '@angular/forms';
 
 export default class Utils {
-
   // Updates validation state on form changes.
   static onFormValueChanged(form: FormGroup, validationMsg: any, errors: any) {
     for (const field in errors) {
@@ -16,7 +15,6 @@ export default class Utils {
               errors[field] += messages[key] + ' ';
             }
           }
-          console.log('error is', errors[field]);
         }
       }
     }

@@ -28,6 +28,11 @@ export class AuthenticationService {
     try {
       const users: UserType[] = JSON.parse(localStorage.getItem('users')) || [];
       console.log(users);
+      const isEmailAlreadyTaken = users.some(item => item.email === user.email);
+      if (isEmailAlreadyTaken) {
+        throw Error('Email already taken');
+      }
+
       users.push(user);
       localStorage.setItem('users', JSON.stringify(users));
 
